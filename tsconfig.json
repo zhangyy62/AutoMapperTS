@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "noImplicitReturns": true
+    },
+
+    "exclude": [
+        "dist",
+        "typings",
+        "node_modules"
+    ]
+}
