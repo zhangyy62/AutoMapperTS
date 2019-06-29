@@ -17,19 +17,10 @@ type convertUsingClassOrInstanceOrFunction = ((ctx: IRC) => any) | ((ctx: IRC, c
 class AutoMapper extends AutoMapperBase {
     private profiles: any;
     private mappings: any;
-    // private instance = new AutoMapper();
     constructor() {
         super();
-        // if (this.instance) {
-        //     return this.instance;
-        // } else {
-        //     this.instance = this;
-
-            this.profiles = {};
-            this.mappings = {};
-
-        //     // this._asyncMapper = new AsyncAutoMapper();
-        // }
+        this.profiles = {};
+        this.mappings = {};
     }
 
     private mapArray(mapping: IMapping, sourceArray: Array<any>): Array<any> {
@@ -612,7 +603,6 @@ class AutoMapper extends AutoMapperBase {
                 return property;
             }
         }
-
         return null;
     }
 }
