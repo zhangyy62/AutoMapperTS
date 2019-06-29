@@ -4,8 +4,8 @@ import { IConfiguration, IMemberConfigurationOptions } from '../src/interfaces/i
 
 describe('#simpleMapping', function () {
     it('convert properties', () => {
-        var objA = { prop1: 'From A', prop2: 'From A too' };
-        let expectedResult = { testprop1: 'From A', prop2: 'From A too' };
+        var objA = { prop1: 'prop1', prop2: 'prop2' };
+        let expectedResult = { testprop1: 'prop1', prop2: 'prop2' };
 
         AutoMapper.createMap('a', 'b')
             .forMember('testprop1', (opts: IMemberConfigurationOptions) => opts.mapFrom('prop1'));
@@ -16,8 +16,8 @@ describe('#simpleMapping', function () {
     });
 
     it('ignore properties', () => {
-        let objA = { prop1: 'From A', prop2: 'From A too' };
-        let expectedResult = { prop1: 'From A' };
+        var objA = { prop1: 'prop1', prop2: 'prop2' };
+        let expectedResult = { prop1: 'prop1' };
 
         AutoMapper.createMap('a', 'b')
             .forSourceMember('prop2', (opts: IMemberConfigurationOptions) => opts.ignore());
