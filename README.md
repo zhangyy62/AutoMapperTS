@@ -1,6 +1,6 @@
 # AutoMapperJS
-For personal learning and practice. This is a lib which ignore properties or mapping. 
-[中文文档](.README.cn.md)
+For personal learning and practice. This is a lib which ignore properties or mapping.   
+[中文文档](./README.cn.md)
 
 inspired by https://github.com/loedeman/AutoMapper.
 
