@@ -14,9 +14,7 @@ export interface IDestinationTransformation {
     transformationType: number; // Ideal: AutoMapperJs.DestinationTransformationType (but not as easy as it appears to be);
     constant?: any;
     memberConfigurationOptionsFunc?: (opts: IMemberConfigurationOptions) => void;
-    asyncMemberConfigurationOptionsFunc?: (opts: IMemberConfigurationOptions, cb: IMemberCallback) => void;
     sourceMemberConfigurationOptionsFunc?: (opts: ISourceMemberConfigurationOptions) => void;
-    asyncSourceMemberConfigurationOptionsFunc?: (opts: ISourceMemberConfigurationOptions, cb: IMemberCallback) => void;
 }
 
 export interface IDestinationProperty extends IProperty {
@@ -74,30 +72,6 @@ export interface IMemberMappingMetaData {
 }
 
 /**
- * Member mapping properties.
- */
-interface IForMemberMapping {
-    /** The source member property name. */
-    sourceProperty: string;
-    /** The destination member property name parts for nested property support (e.g. 'type.name'). */
-    destinationProperty: string;
-    /** Source or destination mapping. */
-    sourceMapping: boolean;
-    /** All mapping values and/or functions resulting from stacked for(Source)Member calls. */
-    mappingValuesAndFunctions: Array<any>;
-    /** Whether or not this destination property must be ignored. */
-    ignore: boolean;
-    /** Whether or not this member mapping has an asynchronous mapping function. */
-    async: boolean;
-    /** 
-     * The object will only be mapped when the condition is met.
-     * @param {any} sourceObject The source object to check.
-     * @returns {boolean}
-     */
-    conditionFunction: (sourceObject: any) => boolean;
-}
-
-/**
  * Interface for returning an object with available 'sub' functions to enable method chaining (e.g. automapper.createMap().forMember().forMember() ...)
  */
 export interface ICreateMapFluentFunctions {
@@ -109,7 +83,7 @@ export interface ICreateMapFluentFunctions {
      */
     forMember: (sourceProperty: string, valueOrFunction: any |
                  ((opts: IMemberConfigurationOptions) => any) |
-                 ((opts: IMemberConfigurationOptions, cb: IMemberCallback) => void)) => ICreateMapFluentFunctions;
+                 ((opts: IMemberConfigurationOptions) => void)) => ICreateMapFluentFunctions;
 
     /**
      * Customize configuration for an individual source member.
@@ -119,7 +93,7 @@ export interface ICreateMapFluentFunctions {
      */
     forSourceMember: (sourceProperty: string,
                       sourceMemberConfigFunction: ((opts: ISourceMemberConfigurationOptions) => any) |
-                                                  ((opts: ISourceMemberConfigurationOptions, cb: IMemberCallback) => void)
+                                                  ((opts: ISourceMemberConfigurationOptions) => void)
                      ) => ICreateMapFluentFunctions;
 
     /**
@@ -139,7 +113,7 @@ export interface ICreateMapFluentFunctions {
      * @param typeConverterClassOrFunction The converter class or function to use when converting.
      */
     convertUsing: (typeConverterClassOrFunction: ((resolutionContext: IResolutionContext) => any) |
-                                                 ((resolutionContext: IResolutionContext, callback: IMapCallback) => void) |
+                                                 ((resolutionContext: IResolutionContext) => void) |
                                                  ITypeConverter |
                                                  (new() => ITypeConverter)
                   ) => void;
@@ -181,7 +155,7 @@ export interface IMapping {
      * @returns {any} Destination object.
      */
     typeConverterFunction: ((resolutionContext: IResolutionContext) => any) |
-                           ((resolutionContext: IResolutionContext, callback: IMapCallback) => void);
+                           ((resolutionContext: IResolutionContext) => void);
 
     /** The source type class to convert from. */
     sourceTypeClass: any;
@@ -194,9 +168,6 @@ export interface IMapping {
 
     /** Whether or not to ignore all properties not specified using createMap. */
     ignoreAllNonExisting?: boolean;
-
-    /** Whether or not an mapping has to be asynchronous. */
-    async: boolean;
 
     /*
      * PERFORMANCE ENHANCEMENTS
@@ -272,40 +243,6 @@ export interface ISourceMemberConfigurationOptions extends IMappingConfiguration
      * when mapping.
      */
     ignore: () => void;
-}
-
-/**
- * Member callback interface
- */
-export interface IMemberCallback {
-    /**
-     * Callback function to call when the async operation is executed.
-     * @param {any} callbackValue Callback value to be used as output for the for(Source)Member call.
-     */
-    (callbackValue: any): void;
-}
-
-/**
- * Member callback interface
- */
-interface IAsyncTransformCallback {
-    /**
-     * Callback function to call when the async operation is executed.
-     * @param {any} callbackValue Callback value to be used as output for the for(Source)Member call.
-     * @param {boolean} success Whether or not this call was successful.
-     */
-    (callbackValue: any, success: boolean): void;
-}
-
-/**
- * Member callback interface
- */
-export interface IMapCallback {
-    /**
-     * Callback function to call when the async operation is executed.
-     * @param {any} result Callback value to be used as output for the mapAsync call.
-     */
-    (result: any): void;
 }
 
 /**
@@ -389,30 +326,5 @@ export interface IMapItemFunction {
 }
 
 export interface IAsyncMapItemFunction {
-    (mapping: IMapping, sourceObject: any, destinationObject: any, callback: IMapCallback): void;
-}
-
-interface ICreateMapParameters {
-    mapping: IMapping;
-    destinationProperty: string;
-    conversionValueOrFunction: any;
-    sourceMapping: boolean;
-    fluentFunctions: ICreateMapFluentFunctions;
-}
-
-interface IGetOrCreatePropertyParameters {
-    propertyNameParts: string[];
-    mapping: IMapping;
-    parent?: IPropertyOld;
-    propertyArray: IPropertyOld[];
-    destination?: string;
-    sourceMapping: boolean;
-}
-
-interface ICreatePropertyParameters {
-    name: string;
-    mapping: IMapping;
-    parent: IPropertyOld;
-    propertyArray: IPropertyOld[];
-    sourceMapping: boolean;
+    (mapping: IMapping, sourceObject: any, destinationObject: any): void;
 }

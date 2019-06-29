@@ -1,18 +1,17 @@
 import AutoMapperHelper from "./utils/autoMapperHelper";
-import { IMapping, IMapItemFunction, ICreateMapFluentFunctions, IMemberConfigurationOptions, ISourceMemberConfigurationOptions, IMemberCallback, IResolutionContext, IMapCallback, IDestinationProperty, IDestinationTransformation, ICreateMapForMemberParameters, IMemberMappingMetaData, ISourceProperty, IProperty } from "./interfaces/interfaces";
+import { IMapping, IMapItemFunction, ICreateMapFluentFunctions, IMemberConfigurationOptions, ISourceMemberConfigurationOptions, IResolutionContext, IDestinationProperty, IDestinationTransformation, ICreateMapForMemberParameters, IMemberMappingMetaData, ISourceProperty, IProperty } from "./interfaces/interfaces";
 import { TypeConverter } from "./base/typeConverter";
 import { AutoMapperBase } from "./base/autoMapperBase";
 import { DestinationTransformationType } from "./enum/destinationTransformationType";
 type IFluentFunc = ICreateMapFluentFunctions;
 type IDMCO = IMemberConfigurationOptions;
 type ISMCO = ISourceMemberConfigurationOptions;
-type IMC = IMemberCallback;
 type IRC = IResolutionContext;
 type TC = TypeConverter;
 type stringOrClass = string | (new () => any);
-type forMemberValueOrFunction = any | ((opts: IDMCO) => any) | ((opts: IDMCO, cb: IMC) => void);
-type forSourceMemberFunction = ((opts: ISMCO) => any) | ((opts: ISMCO, cb: IMC) => void);
-type convertUsingClassOrInstanceOrFunction = ((ctx: IRC) => any) | ((ctx: IRC, callback: IMapCallback) => void) | TC | (new () => TC);
+type forMemberValueOrFunction = any | ((opts: IDMCO) => any) | ((opts: IDMCO) => void);
+type forSourceMemberFunction = ((opts: ISMCO) => any) | ((opts: ISMCO) => void);
+type convertUsingClassOrInstanceOrFunction = ((ctx: IRC) => any) | ((ctx: IRC) => void) | TC | (new () => TC);
 
 class AutoMapper extends AutoMapperBase {
     private profiles: any;
@@ -140,10 +139,6 @@ class AutoMapper extends AutoMapperBase {
             return sourceObject;
         }
 
-        if (mapping.async) {
-            throw new Error('Impossible to use asynchronous mapping using automapper.map(); use automapper.mapAsync() instead.');
-        }
-
         if (this.isArray(sourceObject)) {
             return this.mapArray(mapping, sourceObject);
         }
@@ -161,8 +156,7 @@ class AutoMapper extends AutoMapperBase {
             mapItemFunction: (m: IMapping, srcObj: any, dstObj: any): any => this.mapItem(m, srcObj, dstObj),
             sourceTypeClass: (typeof srcKeyOrType === 'string' ? undefined : srcKeyOrType),
             destinationTypeClass: (typeof dstKeyOrType === 'string' ? undefined : dstKeyOrType),
-            profile: undefined,
-            async: false
+            profile: undefined
         };
         this.mappings[mapping.sourceKey + mapping.destinationKey] = mapping;
         return mapping;
@@ -173,7 +167,7 @@ class AutoMapper extends AutoMapperBase {
         var fluentFunc: ICreateMapFluentFunctions = {
             forMember: (prop: string, valFunc: forMemberValueOrFunction): ICreateMapFluentFunctions =>
                 this.createMapForMember({ mapping: mapping, propertyName: prop, transformation: valFunc, sourceMapping: false, fluentFunctions: fluentFunc }),
-            forSourceMember: (prop: string, cfgFunc: ((opts: ISMCO) => any) | ((opts: ISMCO, cb: IMC) => void)): ICreateMapFluentFunctions =>
+            forSourceMember: (prop: string, cfgFunc: ((opts: ISMCO) => any) | ((opts: ISMCO) => void)): ICreateMapFluentFunctions =>
                 this.createMapForMember({ mapping: mapping, propertyName: prop, transformation: cfgFunc, sourceMapping: true, fluentFunctions: fluentFunc }),
             forAllMembers: (func: (dstObj: any, dstProp: string, value: any) => void): ICreateMapFluentFunctions =>
                 this.createMapForAllMembers(mapping, fluentFunc, func),
@@ -203,11 +197,6 @@ class AutoMapper extends AutoMapperBase {
         if (!this.mergeSourceProperty(property, mapping.properties, sourceMapping)) {
             mapping.properties.push(property);
         }
-
-        if (metadata.async) {
-            // this._asyncMapper.createMapForMember(mapping, this.findProperty(property.name, mapping.properties));
-        }
-
         return fluentFunctions;
     }
 

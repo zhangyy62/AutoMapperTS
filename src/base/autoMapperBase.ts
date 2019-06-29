@@ -1,4 +1,4 @@
-import { IMemberConfigurationOptions, ICreateMapFluentFunctions, ISourceMemberConfigurationOptions, IMapping, IDestinationProperty, IProfile, ISourceProperty, IMemberCallback } from "../interfaces/interfaces";
+import { IMemberConfigurationOptions, ICreateMapFluentFunctions, ISourceMemberConfigurationOptions, IMapping, IDestinationProperty, IProfile, ISourceProperty } from "../interfaces/interfaces";
 import AutoMapperHelper from "../utils/autoMapperHelper";
 
 type IFluentFunc = ICreateMapFluentFunctions;
@@ -92,7 +92,7 @@ export abstract class AutoMapperBase {
         sourceObject: any,
         sourcePropertyName: string,
         destinationObject: any,
-        transformFunction: (destinationProperty: IDestinationProperty, memberOptions: IDMCO, callback?: IMemberCallback) => void,
+        transformFunction: (destinationProperty: IDestinationProperty, memberOptions: IDMCO) => void,
         autoMappingCallbackFunction?: (dstPropVal: any) => void): void {
 
         // TODO Property mappings are already located before

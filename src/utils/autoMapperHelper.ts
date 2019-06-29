@@ -143,8 +143,7 @@ export default class AutoMapperHelper {
         if (sourceMapping) {
             if (async) {
                 transformation = {
-                    transformationType: DestinationTransformationType.AsyncSourceMemberOptions,
-                    asyncSourceMemberConfigurationOptionsFunc: func
+                    transformationType: DestinationTransformationType.AsyncSourceMemberOptions
                 };
             } else {
                 transformation = {
@@ -155,8 +154,7 @@ export default class AutoMapperHelper {
         } else {
             if (async) {
                 transformation = {
-                    transformationType: DestinationTransformationType.AsyncMemberOptions,
-                    asyncMemberConfigurationOptionsFunc: func
+                    transformationType: DestinationTransformationType.AsyncMemberOptions
                 };
             } else {
                 transformation = {
