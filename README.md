@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/sparkxxxxxx/AutoMapperTS.svg?branch=master)](https://travis-ci.org/sparkxxxxxx/AutoMapperTS)
+
 # AutoMapperJS
 For personal learning and practice. This is a lib which ignore properties or mapping.   
 [中文文档](./README.cn.md)
