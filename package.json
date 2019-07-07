@@ -1,7 +1,7 @@
 {
-  "name": "automapperjs",
+  "name": "automapper-ts-learning",
   "version": "0.0.1",
-  "description": "仿造c#版本automapper开发的js版本。供学习js和typescript使用。",
+  "description": "automapper for learning",
   "main": "dist/index.js",
 	"module": "dist/index.es.js",
 	"browser": "dist/index.bundle.js",
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/sparkxxxxxx/AutoMapperJS.git"
   },
-  "author": "",
+  "author": "sparkxxxxxx",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sparkxxxxxx/AutoMapperJS/issues"
